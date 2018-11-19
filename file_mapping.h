@@ -4,13 +4,14 @@
 #include <boost/interprocess/mapped_region.hpp>
 #include <filesystem>
 #include <cstddef>
+#include <type_traits>
 
 struct FileMappingError: std::runtime_error {
     using std::runtime_error::runtime_error;
 };
 
 template<typename Handler>
-void MapFile(
+auto MapFile(
     const char *a_filename,
     Handler a_handler,
     boost::interprocess::mode_t a_mode = boost::interprocess::read_only,
@@ -26,10 +27,10 @@ void MapFile(
             boost::interprocess::mapped_region region(mapping, a_mode);
             region.advise(a_advice);
 
-            a_handler(region.get_address(), region.get_size());
+            return a_handler(region.get_address(), region.get_size());
         } else {
             // call handler for empty files too
-            a_handler(nullptr, 0);
+            return a_handler(nullptr, 0);
         }
     } catch (boost::interprocess::interprocess_exception &x) {
         throw FileMappingError(std::string("Can't map file \"") + a_filename + "\": " + x.what());
