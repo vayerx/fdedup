@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE fdedup
 #include <boost/test/unit_test.hpp>
 
-#include "fdedup.h"
+#include <fdedup.h>
 
 #include <fstream>
 
@@ -9,10 +9,10 @@ namespace fs = std::filesystem;
 
 struct TestFile
 {
-    uintmax_t size;
-    size_t hash;
-    uintmax_t inode;
-    std::string contents;
+    uintmax_t size = 0;
+    size_t hash = 0;
+    uintmax_t inode = 0;
+    std::string contents = {};
 };
 
 class TestFilesystemAccessor
@@ -25,7 +25,7 @@ public:
 
     void IterateFiles(std::function<void (const fs::path &, uintmax_t)> a_handler) override {
         for (const auto &[path, file]: m_files) {
-            // BOOST_TEST_MESSAGE("Checking " + path.string());
+            BOOST_TEST_MESSAGE("Checking " + path.string());
             a_handler(path, file.size);
         }
     }
