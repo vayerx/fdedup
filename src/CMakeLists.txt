@@ -20,6 +20,5 @@ target_link_libraries(fdedup
 )
 
 install(TARGETS fdedup
-    CONFIGURATIONS Release
     RUNTIME DESTINATION bin
 )
