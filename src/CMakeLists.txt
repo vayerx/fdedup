@@ -1,4 +1,4 @@
-add_library(core
+add_library(core STATIC
     fdedup.cpp
     fs_accessor.cpp
 )
@@ -20,6 +20,5 @@ target_link_libraries(fdedup
 )
 
 install(TARGETS fdedup
-    CONFIGURATIONS Release
     RUNTIME DESTINATION bin
 )
